@@ -1,17 +1,17 @@
 package com.tech.techblogback.service;
 
-import com.sun.istack.NotNull;
 import com.tech.techblogback.dto.req.UsersReqDTO;
 import com.tech.techblogback.dto.req.res.UserResDTO;
 import com.tech.techblogback.model.Users;
 import com.tech.techblogback.repository.UsersRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -35,7 +35,6 @@ public class UsersService {
         if(this.findAutenthication(dto.getEmail()).isPresent())
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Email inválido");
 
-//        this.emailService.findAutenthication(dto.getEmail());
 
         this.passwordService.newPasswordValidation(dto.getPassword(), dto.getPasswordConfirmation());
 
@@ -67,8 +66,30 @@ public class UsersService {
 
         throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Email inválido");
     }
+    public Users findById(Long id) {
+        return this.usersRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
+    }
 
+    public void permanentDestroy(Long id) {
+        if (!this.usersRepository.findByIdAndNotDeleted(id).isPresent())
+            throw new ServiceException("id não existente");
+        this.usersRepository.deleteById(id);
+    }
 
+    public Users save(Users users) {
+        return this.findById(this.usersRepository.save(users).getId());
+    }
+
+    public void logicalExclusion(Long id) {
+        if (!this.usersRepository.findById(id).isPresent())
+            throw new ServiceException("NOT FOUND");
+        this.usersRepository.softDelete(id);
+    }
+
+    public List<Users> consultAll(boolean deleted){
+        if (this.usersRepository.findAllUsers(deleted));
+         return this.consultAll(deleted);
+    }
 }
 
 

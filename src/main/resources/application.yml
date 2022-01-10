@@ -4,9 +4,9 @@ spring:
 
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/tech_blog
-    username: postgres
-    password: root
+    url: jdbc:postgresql://${DATABASE_URL_NAME}:5432/${DATABASE_NAME}
+    username: ${DATABASE_USER}
+    password:  ${DATABASE_PASS}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate.ddl-auto: update

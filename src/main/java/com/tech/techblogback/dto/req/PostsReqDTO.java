@@ -1,18 +1,13 @@
 package com.tech.techblogback.dto.req;
 
-import com.tech.techblogback.model.Users;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class PostsReqDTO {
 
-    private Users users;
+    private Long usersId;
 
     private String title;
 
@@ -21,6 +16,8 @@ public class PostsReqDTO {
     private String photoLink;
 
     private boolean privatePost;
+
+
 
 
 }

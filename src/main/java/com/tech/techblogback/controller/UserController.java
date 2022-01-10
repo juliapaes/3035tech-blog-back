@@ -3,12 +3,13 @@ package com.tech.techblogback.controller;
 
 import com.tech.techblogback.dto.req.UsersReqDTO;
 import com.tech.techblogback.dto.req.res.UserResDTO;
+import com.tech.techblogback.model.Users;
 import com.tech.techblogback.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -22,4 +23,31 @@ public class UserController {
     public UserResDTO signUp(@RequestBody UsersReqDTO newUser) {
         return this.usersService.createUsers(newUser);
     }
+
+
+    @GetMapping("/{id}")
+    public UserResDTO show(@PathVariable("id") Long id) {
+        return UserResDTO.of(this.usersService.findById(id));
+    }
+
+    @GetMapping("/findAll")
+    public List<Users> UsersAll(@PathVariable("deleted") Boolean deleted){
+        return UserResDTO.all((Users) this.usersService.consultAll(deleted));
+    }
+
+    @DeleteMapping("/destroy/{id}")
+    public void permanentDestroy(@PathVariable("id") Long id) {
+        this.usersService.permanentDestroy(id);
+    }
+
+    @PutMapping("/{id}")
+    public UserResDTO update(@PathVariable("id") Long id, @Validated @RequestBody UsersReqDTO dto) {
+        return UserResDTO.of(this.usersService.save(dto.toEntity(this.usersService.findById(id))));
+    }
+
+    @DeleteMapping("/{id}")
+    public void logicalExclusion(@PathVariable("id") Long id) {
+        this.usersService.logicalExclusion(id);
+    }
+
 }

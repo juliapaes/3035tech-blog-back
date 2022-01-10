@@ -1,10 +1,12 @@
 package com.tech.techblogback.base;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,11 @@ public interface BaseRepository<T extends BaseEntity, ID> extends PagingAndSorti
 
     @Query("select e from #{#entityName} e where e.id = ?1 and e.deleted is true")
     Optional<T> findDeletedById(ID id);
+
+    @Query("update #{#entityName} e set e.deleted = 'true' where e.id = ?1")
+    @Transactional
+    @Modifying
+    void softDelete(ID id);
 
 
 }
