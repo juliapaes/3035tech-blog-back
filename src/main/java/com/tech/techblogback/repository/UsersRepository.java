@@ -16,6 +16,8 @@ public interface UsersRepository extends BaseRepository<Users, Long> {
 
     Optional<Users> findByEmail(String email);
 
+    Optional<Users> findById(Long id);
+
     Optional<Users> findByPhone(String phone);
 
     @Query(value = "SELECT e FROM users e ORDER BY e.name and e.email", nativeQuery = true)

@@ -19,8 +19,6 @@ import java.util.Optional;
 @NoArgsConstructor
 public class UsersReqDTO {
 
-    private Long UsersId;
-
     @NotNull
     private String name;
 

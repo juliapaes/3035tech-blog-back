@@ -37,6 +37,8 @@ public class UserResDTO {
     public static UserResDTO of(Users entity) {
         return entity == null ? null : new UserResDTO(entity);
     }
+
+
     public static List<Users> all(Users entity) {
         return (List<Users>) new UserResDTO(entity);
     }
