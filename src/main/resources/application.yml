@@ -19,3 +19,7 @@ spring:
       hibernate.enable_lazy_load_no_trans: true
       org.hibernate.envers.audit_table_prefix: AUD_
       org.hibernate.envers.audit_table_suffix: null
+  security:
+    user:
+      name: julia
+      password: 123

@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface UsersRepository extends BaseRepository<Users, Long> {
 
-    @Query(value = "SELECT * FROM movie WHERE users_id = ?1", nativeQuery = true)
-    Optional<Users> findByUsersId(Long id);
+    @Query(value = "SELECT * FROM users WHERE users_id = ?1", nativeQuery = true)
+    Users findByUsersId(Long id);
 
     Users findOneByEmail(String email);
 

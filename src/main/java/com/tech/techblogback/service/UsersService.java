@@ -1,5 +1,6 @@
 package com.tech.techblogback.service;
 
+import com.tech.techblogback.config.security.AuthUtil;
 import com.tech.techblogback.dto.req.UsersReqDTO;
 import com.tech.techblogback.dto.req.res.UserResDTO;
 import com.tech.techblogback.model.Users;
@@ -72,7 +73,7 @@ public class UsersService {
 
     public void permanentDestroy(Long id) {
         if (!this.usersRepository.findByIdAndNotDeleted(id).isPresent())
-            throw new ServiceException("id não existente");
+            throw new ServiceException("usuário não existe");
         this.usersRepository.deleteById(id);
     }
 
@@ -82,13 +83,17 @@ public class UsersService {
 
     public void logicalExclusion(Long id) {
         if (!this.usersRepository.findById(id).isPresent())
-            throw new ServiceException("NOT FOUND");
+            throw new ServiceException("usuário não existe");
         this.usersRepository.softDelete(id);
     }
 
-    public List<Users> consultAll(boolean deleted){
-        if (this.usersRepository.findAllUsers(deleted));
-         return this.consultAll(deleted);
+
+    public Users findAuthenticatedUser() {
+        return this.usersRepository.findByEmail(AuthUtil.getUserEmail())
+                .orElseThrow(() -> new ServiceException("Usuário deve estar autenticado."));
+    }
+    public UserResDTO findAuthenticatedUserDTO() {
+        return new UserResDTO(this.findAuthenticatedUser());
     }
 }
 

@@ -38,8 +38,4 @@ public class UserResDTO {
         return entity == null ? null : new UserResDTO(entity);
     }
 
-
-    public static List<Users> all(Users entity) {
-        return (List<Users>) new UserResDTO(entity);
-    }
 }

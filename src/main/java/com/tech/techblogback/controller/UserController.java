@@ -30,11 +30,6 @@ public class UserController {
         return UserResDTO.of(this.usersService.findById(id));
     }
 
-    @GetMapping("/findAll")
-    public List<Users> UsersAll(@PathVariable("deleted") Boolean deleted){
-        return UserResDTO.all((Users) this.usersService.consultAll(deleted));
-    }
-
     @DeleteMapping("/destroy/{id}")
     public void permanentDestroy(@PathVariable("id") Long id) {
         this.usersService.permanentDestroy(id);

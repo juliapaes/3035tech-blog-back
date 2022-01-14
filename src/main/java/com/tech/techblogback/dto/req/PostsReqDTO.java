@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PostsReqDTO {
 
-    @NotNull
     private String title;
 
     private String description;

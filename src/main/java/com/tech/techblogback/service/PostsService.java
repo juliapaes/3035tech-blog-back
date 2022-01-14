@@ -1,5 +1,6 @@
 package com.tech.techblogback.service;
 
+import com.tech.techblogback.config.security.AuthUtil;
 import com.tech.techblogback.dto.req.PostsReqDTO;
 import com.tech.techblogback.model.Posts;
 import com.tech.techblogback.model.Users;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -23,6 +25,8 @@ public class PostsService {
     private final PostsRepository postsRepository;
 
     private final UsersRepository usersRepository;
+
+    private final UsersService usersService;
 
     public Posts createPost(PostsReqDTO dto){
 
@@ -47,15 +51,21 @@ public class PostsService {
         return this.usersRepository.findById(id);
     }
 
-    // private Optional<Posts> findByIdAndUserId(Long id, Long UserId){return this.postsRepository.findByIdAndUserId(id, UserId);}
-
     private Optional<Posts> findPostDeleted(Long id){return this.postsRepository.findDeletedById(id);}
 
     private  Optional<Posts> findPrivatePost(Long id){return this.postsRepository.findByPrivatePost(id);}
 
+    public Posts findByPostId(Long id) {
+        if (findPostDeleted(id).isPresent()){
+            throw new ServiceException("Post deletado");
+        }
+        return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
+    }
+    
     public void logicalExclusion(Long id) {
-        if (!this.postsRepository.findById(id).isPresent())
-            throw new ServiceException("NOT FOUND");
+        Posts Posts = this.postsRepository.findByIdAndUserId(id, AuthUtil.getUserId())
+                .orElseThrow(() -> new ServiceException("Não foi possível deletar este post"));
+        //  Posts posts = this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("Post não existe!"));
         this.postsRepository.softDelete(id);
     }
 
@@ -68,5 +78,38 @@ public class PostsService {
          }
         return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
     }
+
+
+    public Posts save(Posts posts){
+        Optional<Users> user = this.findById(posts.getUsers().getId());
+        if(user.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Usuário não cadastrado");}
+        return this.findByPostId(this.postsRepository.save(posts).getId());
+    }
+
+    public Posts findByPostsUsers(Long id) {
+        Posts Posts = this.postsRepository.findByIdAndUserId(id, AuthUtil.getUserId())
+                .orElseThrow(() -> new ServiceException("Não foi possivel encontrar o post"));
+        if (Posts == null){
+            if (findPrivatePost(id).isPresent()){
+                throw new ServiceException("Post Privado!");
+            }
+        }
+        if (findPostDeleted(id).isPresent()){
+            throw new ServiceException("Post deletado");
+        }
+        return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
+    }
+
+    public List<Posts> findMyPosts(Long userId) {
+
+        Optional<Users> users = this.findById(userId);
+
+        if(userId != null) {
+            return this.postsRepository.findAll(userId);
+        } else
+            throw new ServiceException("não foi possivel encontrar os posts do usuário");
+        }
+
 
 }
