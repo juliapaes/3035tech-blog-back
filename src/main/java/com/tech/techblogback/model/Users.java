@@ -6,9 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import java.util.List;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +17,7 @@ import java.util.List;
 @Table(name = "users")
 public class Users extends BaseEntity {
 
+        @Column(name = "ID_USER")
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;

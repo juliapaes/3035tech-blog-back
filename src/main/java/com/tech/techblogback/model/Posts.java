@@ -29,11 +29,7 @@ public class Posts extends BaseEntity {
     private boolean privatePost;
 
     @ManyToOne
-    @JoinColumn(name = "USERS_ID")
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID_USER")
     private Users users;
 
-    @PrePersist
-    private void beforeInsert() {
-        this.privatePost = false;
-    }
 }
