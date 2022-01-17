@@ -31,5 +31,4 @@ public interface BaseRepository<T extends BaseEntity, ID> extends PagingAndSorti
     @Modifying
     void softDelete(ID id);
 
-
 }

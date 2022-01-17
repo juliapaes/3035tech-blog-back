@@ -22,10 +22,8 @@ public interface PostsRepository extends BaseRepository<Posts, Long> {
     @Query(value = "select * from posts p where users = users", nativeQuery = true)
     List<Posts> findAll(Long id);
 
-
-
-
-
+    @Query("select e from #{#entityName} e where e.privatePost is false")
+    List<Posts> findAllPosts();
 
 
 }

@@ -20,8 +20,6 @@ public interface UsersRepository extends BaseRepository<Users, Long> {
 
     Optional<Users> findByPhone(String phone);
 
-    @Query(value = "SELECT e FROM users e ORDER BY e.name and e.email", nativeQuery = true)
-    boolean findAllUsers(boolean deleted);
 
 
 }
