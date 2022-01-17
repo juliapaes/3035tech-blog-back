@@ -18,6 +18,11 @@ public class UserController {
     @Autowired
     private UsersService usersService;
 
+    @GetMapping
+    public List<Users> listGet(){
+        return this.usersService.findAll();
+    }
+
 
     @PostMapping("/sign-up")
     public UserResDTO signUp(@RequestBody UsersReqDTO newUser) {

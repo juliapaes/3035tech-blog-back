@@ -37,7 +37,7 @@ public class PostsController {
     }
 
     @GetMapping("/{id}")
-    public PostsResDTO showPostsNotPrivate(@PathVariable("id") Long id) {
+    public PostsResDTO showPostsById(@PathVariable("id") Long id) {
         return PostsResDTO.of(this.postsService.findByPostsId(id));
     }
 
@@ -55,8 +55,8 @@ public class PostsController {
     //    return PostsResDTO.of(this.postsService.findMyPosts(id));
     // }
 
-    @GetMapping("/IdUser")
-     public List<PostsResDTO> AllPostsOfUserWhereDeletedNotTrue(@PathVariable("id")Long userId) {
-        return this.postsService.findMyPosts(userId).stream().map(PostsResDTO::of).collect(Collectors.toList());
+    @GetMapping("/AllPosts")
+     public List<Posts> AllPosts() {
+        return this.postsService.findAllPostsNotPrivate();
       }
 }

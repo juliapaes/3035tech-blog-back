@@ -56,9 +56,13 @@ public class UsersService {
     private Optional<Users> findByEmail(String email){
         return this.usersRepository.findByEmail(email);
     }
+
     private Optional<Users> findByPhone(String mobile){
         return this.usersRepository.findByPhone(mobile);
     }
+
+    public List<Users> findAll(){return this.usersRepository.findAll();}
+
 
     public Optional<Users> findAutenthication(String email) {
         if (email.contains("@")) {

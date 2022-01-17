@@ -55,6 +55,7 @@ public class PostsService {
 
     private  Optional<Posts> findPrivatePost(Long id){return this.postsRepository.findByPrivatePost(id);}
 
+
     public Posts findByPostId(Long id) {
         if (findPostDeleted(id).isPresent()){
             throw new ServiceException("Post deletado");
@@ -101,15 +102,5 @@ public class PostsService {
         return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
     }
 
-    public List<Posts> findMyPosts(Long userId) {
-
-        Optional<Users> users = this.findById(userId);
-
-        if(userId != null) {
-            return this.postsRepository.findAll(userId);
-        } else
-            throw new ServiceException("não foi possivel encontrar os posts do usuário");
-        }
-
-
+    public List<Posts> findAllPostsNotPrivate() {return this.postsRepository.findAllPosts();}
 }
