@@ -2,8 +2,6 @@ package com.tech.techblogback.service;
 
 import com.tech.techblogback.config.security.AuthUtil;
 import com.tech.techblogback.dto.req.PostsReqDTO;
-import com.tech.techblogback.dto.req.UsersReqDTO;
-import com.tech.techblogback.dto.req.res.PostsResDTO;
 import com.tech.techblogback.model.Posts;
 import com.tech.techblogback.model.Users;
 import com.tech.techblogback.repository.PostsRepository;
@@ -65,14 +63,11 @@ public class PostsService {
         return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
     }
     
-    public void logicalExclusion(Long id, PostsReqDTO dto) {
-        Optional<Users> user = this.findById(dto.getUserId());
-        if(user.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Usuário não cadastrado");}
-        if (findByPostId(id) == null){
-             this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
-        }
-         this.postsRepository.softDelete(id);
+    public void logicalExclusion(Long id) {
+        Posts Posts = this.postsRepository.findByIdAndUserId(id, AuthUtil.getUserId())
+                .orElseThrow(() -> new ServiceException("Não foi possível deletar este post"));
+        //  Posts posts = this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("Post não existe!"));
+        this.postsRepository.softDelete(id);
     }
 
      public Posts findByPostsId(Long id) {
@@ -85,23 +80,12 @@ public class PostsService {
         return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
     }
 
-    public Posts save(PostsReqDTO dto, Long id){
-        Optional<Users> user = this.findById(dto.getUserId());
+
+    public Posts save(Posts posts){
+        Optional<Users> user = this.findById(posts.getUsers().getId());
         if(user.isEmpty()){
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Usuário não cadastrado");}
-        if (findByPostId(id) == null){
-            return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
-        }
-        Posts posts = Posts
-                .builder()
-                .description(dto.getDescription())
-                .privatePost(dto.isPrivatePost())
-                .photoLink(dto.getPhotoLink())
-                .title(dto.getTitle())
-                .users(user.get())
-                .build();
-
-        return this.postsRepository.save(posts);
+        return this.findByPostId(this.postsRepository.save(posts).getId());
     }
 
     public Posts findByPostsUsers(Long id) {
@@ -118,5 +102,5 @@ public class PostsService {
         return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
     }
 
-    public List<PostsResDTO> findAllPostsNotPrivate() {return this.postsRepository.findAllPosts();}
+    public List<Posts> findAllPostsNotPrivate() {return this.postsRepository.findAllPosts();}
 }

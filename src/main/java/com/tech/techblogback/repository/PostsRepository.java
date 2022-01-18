@@ -1,7 +1,6 @@
 package com.tech.techblogback.repository;
 
 import com.tech.techblogback.base.BaseRepository;
-import com.tech.techblogback.dto.req.res.PostsResDTO;
 import com.tech.techblogback.model.Posts;
 import org.springframework.data.jpa.repository.Query;
 
@@ -24,7 +23,7 @@ public interface PostsRepository extends BaseRepository<Posts, Long> {
     List<Posts> findAll(Long id);
 
     @Query("select e from #{#entityName} e where e.privatePost is false")
-    List<PostsResDTO> findAllPosts();
+    List<Posts> findAllPosts();
 
 
 }

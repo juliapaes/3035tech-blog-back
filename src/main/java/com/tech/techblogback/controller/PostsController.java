@@ -32,8 +32,8 @@ public class PostsController {
     }
 
     @DeleteMapping("/{id}")
-    public void logicalExclusion(@PathVariable("id") Long id, PostsReqDTO idUser) {
-        this.postsService.logicalExclusion(id, idUser);
+    public void logicalExclusion(@PathVariable("id") Long id) {
+        this.postsService.logicalExclusion(id);
     }
 
     @GetMapping("/{id}")
@@ -43,7 +43,7 @@ public class PostsController {
 
     @PutMapping("/{id}")
       public PostsResDTO update(@PathVariable("id") Long id, @Validated @RequestBody PostsReqDTO dto) {
-        return PostsResDTO.of(this.postsService.save(dto, id));
+         return PostsResDTO.of(this.postsService.save(dto.toEntity(this.postsService.findByPostId(id))));
 }
     @GetMapping("/UserMustBeLogged")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -56,7 +56,7 @@ public class PostsController {
     // }
 
     @GetMapping("/AllPosts")
-     public List<PostsResDTO> AllPosts() {
+     public List<Posts> AllPosts() {
         return this.postsService.findAllPostsNotPrivate();
       }
 }
