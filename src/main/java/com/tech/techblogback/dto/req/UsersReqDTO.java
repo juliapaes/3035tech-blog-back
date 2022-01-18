@@ -22,8 +22,6 @@ public class UsersReqDTO {
     @NotNull
     private String name;
 
-    private Long id;
-
     @NotNull
     private String phone;
 
