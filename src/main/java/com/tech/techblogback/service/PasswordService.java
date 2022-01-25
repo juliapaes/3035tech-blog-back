@@ -2,16 +2,20 @@ package com.tech.techblogback.service;
 
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-
-@NoArgsConstructor
+@AllArgsConstructor
 @Service
 public class PasswordService {
 
+    private final PasswordEncoder passwordEncoder;
+
+    public String encode(String rawPassword) {
+        return this.passwordEncoder.encode(rawPassword);
+    }
 
     public void newPasswordValidation(String newPass, String confirmation) {
 

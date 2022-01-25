@@ -40,7 +40,7 @@ public class UsersService {
         this.passwordService.newPasswordValidation(dto.getPassword(), dto.getPasswordConfirmation());
 
             Users users = new Users();
-        users.setPassword((dto.getPassword()));
+        users.setPassword((this.passwordService.encode(dto.getPassword())));
         users.setProfileLink(dto.getProfileLink());
         users.setEmail(dto.getEmail());
         users.setName(dto.getName());
@@ -82,6 +82,7 @@ public class UsersService {
     }
 
     public Users save(Users users) {
+        users.setPassword((this.passwordService.encode(users.getPassword())));
         return this.findById(this.usersRepository.save(users).getId());
     }
 
