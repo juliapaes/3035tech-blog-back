@@ -43,17 +43,14 @@ public class PostsController {
 
     @PutMapping("/{id}")
       public PostsResDTO update(@PathVariable("id") Long id, @Validated @RequestBody PostsReqDTO dto) {
-        return PostsResDTO.of(this.postsService.save(dto, id));
-}
+        return PostsResDTO.of(this.postsService.save(dto.toEntity(this.postsService.findByPostId(id))));
+    }
+
     @GetMapping("/UserMustBeLogged")
     @PreAuthorize("hasAuthority('ADMIN')")
     public PostsResDTO showPostsOfUsersBeLogged(@PathVariable("id") Long id) {
         return PostsResDTO.of(this.postsService.findByPostsUsers(id));
     }
-    // @GetMapping("/{id}")
-    //public PostsResDTO AllPostsOfUserWhereDeletedNotTrue(@PathVariable("id") Long id) {
-    //    return PostsResDTO.of(this.postsService.findMyPosts(id));
-    // }
 
     @GetMapping("/AllPosts")
      public List<PostsResDTO> AllPosts() {

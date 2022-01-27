@@ -18,10 +18,10 @@ public interface PostsRepository extends BaseRepository<Posts, Long> {
     Optional<Posts> findById(Long id);
 
     @Query(value = "SELECT e FROM posts e ORDER BY e.id and e.users", nativeQuery = true)
-    Optional<Posts> findByIdAndUserId(Long id, Long userId);
+    Optional<Posts> findByIdAndUserId(Long id);
 
-    @Query(value = "select * from posts p where users = users", nativeQuery = true)
-    List<Posts> findAll(Long id);
+    @Query(value = "select * from posts p where USER_ID = USER_ID", nativeQuery = true)
+    List<Posts> findAllPostsOfUsers();
 
     @Query("select e from #{#entityName} e where e.privatePost is false")
     List<PostsResDTO> findAllPosts();
