@@ -1,8 +1,6 @@
 package com.tech.techblogback.service;
 
-import com.tech.techblogback.config.security.AuthUtil;
 import com.tech.techblogback.dto.req.PostsReqDTO;
-import com.tech.techblogback.dto.req.UsersReqDTO;
 import com.tech.techblogback.dto.req.res.PostsResDTO;
 import com.tech.techblogback.model.Posts;
 import com.tech.techblogback.model.Users;
@@ -85,27 +83,17 @@ public class PostsService {
         return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
     }
 
-    public Posts save(PostsReqDTO dto, Long id){
-        Optional<Users> user = this.findById(dto.getUserId());
-        if(user.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Usuário não cadastrado");}
-        if (findByPostId(id) == null){
-            return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
+    public Posts save(Posts posts){
+        if (findPostIdAndUserId().isEmpty()){
+            throw new ServiceException("id não encontrado!");
         }
-        Posts posts = Posts
-                .builder()
-                .description(dto.getDescription())
-                .privatePost(dto.isPrivatePost())
-                .photoLink(dto.getPhotoLink())
-                .title(dto.getTitle())
-                .users(user.get())
-                .build();
-
-        return this.postsRepository.save(posts);
+        return this.findByPostId(this.postsRepository.save(posts).getId());
     }
 
+
+
     public Posts findByPostsUsers(Long id) {
-        Posts Posts = this.postsRepository.findByIdAndUserId(id, AuthUtil.getUserId())
+        Posts Posts = this.postsRepository.findByIdAndUserId(id)
                 .orElseThrow(() -> new ServiceException("Não foi possivel encontrar o post"));
         if (Posts == null){
             if (findPrivatePost(id).isPresent()){
@@ -117,6 +105,8 @@ public class PostsService {
         }
         return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
     }
+    public List<Posts> findPostIdAndUserId(){
+        return this.postsRepository.findAllPostsOfUsers();}
 
     public List<PostsResDTO> findAllPostsNotPrivate() {return this.postsRepository.findAllPosts();}
 }
