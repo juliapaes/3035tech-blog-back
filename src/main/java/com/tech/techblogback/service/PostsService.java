@@ -12,7 +12,6 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -90,23 +89,46 @@ public class PostsService {
         return this.findByPostId(this.postsRepository.save(posts).getId());
     }
 
+    
+//    public Posts findByPostsUsers(Long id) {
+//        Posts Posts = this.postsRepository.findByIdAndUserId(id)
+//                .orElseThrow(() -> new ServiceException("Não foi possivel encontrar o post"));
+//        if (Posts == null){
+//            if (findPrivatePost(id).isPresent()){
+//                throw new ServiceException("Post Privado!");
+//            }
+//        }
+//        if (findPostDeleted(id).isPresent()){
+//            throw new ServiceException("Post deletado");
+//        }
+//        return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
+//    }
 
-
-    public Posts findByPostsUsers(Long id) {
-        Posts Posts = this.postsRepository.findByIdAndUserId(id)
-                .orElseThrow(() -> new ServiceException("Não foi possivel encontrar o post"));
-        if (Posts == null){
-            if (findPrivatePost(id).isPresent()){
-                throw new ServiceException("Post Privado!");
-            }
+    public boolean usuarioEstaAutenticado(String email, String senha) {
+        try {
+            // Verificando se os dados inseridos pelo usuário (email e senha) combinam com o que está
+            // registrado
+            // na tabela users, dentro do banco de dados.
+            List<Users> listUsers = this.usersRepository.findByAutheticated(email, senha);
+            if (listUsers.isEmpty())
+                return false;
+            else
+                return true;
+        } catch (Exception erro) {
+            System.out.println(erro);
+            return false;
         }
-        if (findPostDeleted(id).isPresent()){
-            throw new ServiceException("Post deletado");
-        }
-        return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
     }
+            public List<Posts> UsersPosts (String senha, String email){
+                    if (this.usuarioEstaAutenticado(senha, email))
+                       return this.postsRepository.findAllPostsOfUsers();
+                    else
+                        throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "você não está autenticado");
+            }
+
     public List<Posts> findPostIdAndUserId(){
         return this.postsRepository.findAllPostsOfUsers();}
 
     public List<PostsResDTO> findAllPostsNotPrivate() {return this.postsRepository.findAllPosts();}
+
 }

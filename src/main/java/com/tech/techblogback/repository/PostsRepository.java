@@ -12,7 +12,7 @@ public interface PostsRepository extends BaseRepository<Posts, Long> {
 
     // Optional<Posts> findByIdAndUserId(Long id, Long userId);
 
-    @Query("select e from #{#entityName} e where e.id = ?1 and e.privatePost is true")
+    @Query(value = "select e from #{#entityName} e where e.id = ?1 and e.privatePost is true", nativeQuery = true)
     Optional<Posts> findByPrivatePost(Long id);
 
     Optional<Posts> findById(Long id);
@@ -20,11 +20,14 @@ public interface PostsRepository extends BaseRepository<Posts, Long> {
     @Query(value = "SELECT e FROM posts e ORDER BY e.id and e.users", nativeQuery = true)
     Optional<Posts> findByIdAndUserId(Long id);
 
-    @Query(value = "select * from posts p where USER_ID = USER_ID", nativeQuery = true)
+    @Query(value = "select * from posts p inner join users u on p.user_id = u.id_user where p.deleted = false", nativeQuery = true)
     List<Posts> findAllPostsOfUsers();
 
-    @Query("select e from #{#entityName} e where e.privatePost is false")
+    @Query(value = "select e from #{#entityName} e where e.privatePost is false", nativeQuery = true)
     List<PostsResDTO> findAllPosts();
 
+//    @Query(value =
+//            "select * from posts p inner join users u on p.user_id = u.id_user where p.deleted = false and u.email = p.user_id ", nativeQuery = true)
+//    List<Posts> findPostsOfUsers();
 
 }
