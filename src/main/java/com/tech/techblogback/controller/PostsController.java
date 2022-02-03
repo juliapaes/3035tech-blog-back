@@ -2,19 +2,14 @@ package com.tech.techblogback.controller;
 
 
 import com.tech.techblogback.dto.req.PostsReqDTO;
-import com.tech.techblogback.dto.req.UsersReqDTO;
 import com.tech.techblogback.dto.req.res.PostsResDTO;
-import com.tech.techblogback.dto.req.res.UserResDTO;
 import com.tech.techblogback.model.Posts;
 import com.tech.techblogback.service.PostsService;
 import com.tech.techblogback.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/posts")
@@ -42,15 +37,12 @@ public class PostsController {
     }
 
     @PutMapping("/{id}")
-      public PostsResDTO update(@PathVariable("id") Long id, @Validated @RequestBody PostsReqDTO dto) {
+      public PostsResDTO update(@PathVariable("id") Long id,  @RequestBody PostsReqDTO dto) {
         return PostsResDTO.of(this.postsService.save(dto.toEntity(this.postsService.findByPostId(id))));
     }
 
-    @GetMapping("/UserMustBeLogged")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public PostsResDTO showPostsOfUsersBeLogged(@PathVariable("id") Long id) {
-        return PostsResDTO.of(this.postsService.findByPostsUsers(id));
-    }
+    @GetMapping("/UsersYoursPosts")
+    public List<Posts> UserPosts(@RequestParam String email,@RequestParam String password){return this.postsService.UsersPosts(email, password);}
 
     @GetMapping("/AllPosts")
      public List<PostsResDTO> AllPosts() {
