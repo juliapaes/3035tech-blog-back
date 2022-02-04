@@ -17,6 +17,9 @@ public interface PostsRepository extends BaseRepository<Posts, Long> {
 
     Optional<Posts> findById(Long id);
 
+    @Query(value = "select * from posts p where p.user_id = ?1", nativeQuery = true)
+    List<Posts> findByUserId(Long USER_ID);
+
     @Query(value = "SELECT e FROM posts e ORDER BY e.id and e.users", nativeQuery = true)
     Optional<Posts> findByIdAndUserId(Long id);
 

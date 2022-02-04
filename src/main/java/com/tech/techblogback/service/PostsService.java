@@ -61,6 +61,12 @@ public class PostsService {
         }
         return this.postsRepository.findById(id).orElseThrow(() -> new ServiceException("id não encontrado"));
     }
+
+    public List<Posts> findPostsBYIdUser(Long userId){
+        if (findById(userId).isEmpty()){throw new ServiceException("usuário não encontrado!");}
+        return this.postsRepository.findByUserId(userId);
+    }
+
     
     public void logicalExclusion(Long id, PostsReqDTO dto) {
         Optional<Users> user = this.findById(dto.getUserId());
@@ -126,8 +132,7 @@ public class PostsService {
                         throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "você não está autenticado");
             }
 
-    public List<Posts> findPostIdAndUserId(){
-        return this.postsRepository.findAllPostsOfUsers();}
+    public List<Posts> findPostIdAndUserId(){return this.postsRepository.findAllPostsOfUsers();}
 
     public List<PostsResDTO> findAllPostsNotPrivate() {return this.postsRepository.findAllPosts();}
 
