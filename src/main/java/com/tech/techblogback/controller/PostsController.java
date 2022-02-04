@@ -36,10 +36,14 @@ public class PostsController {
         return PostsResDTO.of(this.postsService.findByPostsId(id));
     }
 
+    @GetMapping("/{idUser}")
+    public List<Posts> showPostsByIdUser(@RequestParam Long idUser) {
+        return this.postsService.findPostsBYIdUser(idUser);
+    }
+
     @PutMapping("/{id}")
       public PostsResDTO update(@PathVariable("id") Long id,  @RequestBody PostsReqDTO dto) {
-        return PostsResDTO.of(this.postsService.save(dto.toEntity(this.postsService.findByPostId(id))));
-    }
+        return PostsResDTO.of(this.postsService.save(dto.toEntity(this.postsService.findByPostId(id))));}
 
     @GetMapping("/UsersYoursPosts")
     public List<Posts> UserPosts(@RequestParam String email,@RequestParam String password){return this.postsService.UsersPosts(email, password);}

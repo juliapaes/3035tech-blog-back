@@ -19,9 +19,7 @@ public class UserController {
     private UsersService usersService;
 
     @GetMapping
-    public List<Users> listGet(){
-        return this.usersService.findAll();
-    }
+    public List<Users> listGet(){return this.usersService.findAll();}
 
 
     @PostMapping("/sign-up")
@@ -35,10 +33,12 @@ public class UserController {
         return UserResDTO.of(this.usersService.findById(id));
     }
 
+
     @DeleteMapping("/destroy/{id}")
     public void permanentDestroy(@PathVariable("id") Long id) {
         this.usersService.permanentDestroy(id);
     }
+
 
     @PutMapping("/{id}")
     public UserResDTO update(@PathVariable("id") Long id, @Validated @RequestBody UsersReqDTO dto) {
