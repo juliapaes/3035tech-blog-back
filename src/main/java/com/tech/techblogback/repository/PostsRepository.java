@@ -10,12 +10,8 @@ import java.util.Optional;
 
 public interface PostsRepository extends BaseRepository<Posts, Long> {
 
-    // Optional<Posts> findByIdAndUserId(Long id, Long userId);
-
-    @Query(value = "select e from #{#entityName} e where e.id = ?1 and e.privatePost is true", nativeQuery = true)
+    @Query("select e from #{#entityName} e where e.id = ?1 and e.privatePost is true")
     Optional<Posts> findByPrivatePost(Long id);
-
-    Optional<Posts> findById(Long id);
 
     @Query(value = "select * from posts p where p.user_id = ?1", nativeQuery = true)
     List<Posts> findByUserId(Long USER_ID);
@@ -26,7 +22,7 @@ public interface PostsRepository extends BaseRepository<Posts, Long> {
     @Query(value = "select * from posts p inner join users u on p.user_id = u.id_user where p.deleted = false", nativeQuery = true)
     List<Posts> findAllPostsOfUsers();
 
-    @Query(value = "select e from #{#entityName} e where e.privatePost is false", nativeQuery = true)
+    @Query("select e from #{#entityName} e where e.privatePost is false")
     List<PostsResDTO> findAllPosts();
 
 //    @Query(value =
