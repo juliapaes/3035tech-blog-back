@@ -37,7 +37,6 @@ public class PostsResDTO {
         this.dateReg = p.getCreatedAt();
 
     }
-
     public static PostsResDTO of(Posts entity) {
         return entity == null ? null : new PostsResDTO(entity);
     }
