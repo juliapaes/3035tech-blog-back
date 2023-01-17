@@ -14,14 +14,11 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity {
 
     @NotNull
-    @Column(name = "DELETED")
     protected boolean deleted;
 
     @NotNull
-    @Column(name = "DATE_REG")
     protected LocalDateTime createdAt;
 
-    @Column(name = "UPDATE_DATE")
     protected LocalDateTime updatedAt;
 
     @PrePersist

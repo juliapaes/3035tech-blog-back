@@ -10,11 +10,10 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
 @Entity
-@Table(name = "posts")
-public class Posts extends BaseEntity {
+@Table(name = "POSTS")
+public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,10 +25,7 @@ public class Posts extends BaseEntity {
 
     private String photoLink;
 
-    private boolean privatePost;
-
     @ManyToOne
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID_USER")
-    private Users users;
+    private User user;
 
 }

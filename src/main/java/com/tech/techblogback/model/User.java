@@ -7,17 +7,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.List;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
 @Entity
-@Table(name = "users")
-public class Users extends BaseEntity {
+@Table(name = "USERS")
+public class User extends BaseEntity {
 
-        @Column(name = "ID_USER")
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;
@@ -25,16 +24,15 @@ public class Users extends BaseEntity {
         @NotNull
         private String name;
 
-        private String phone;
-
         @NotNull
         private String email;
 
-        @NotNull
-        private String password;
+        private String phone;
 
         private String profileLink;
 
-
+        @OneToMany()
+        @JoinColumn(name = "post_id", referencedColumnName = "id")
+        private List<Post> posts;
 
 }

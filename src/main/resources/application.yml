@@ -4,13 +4,12 @@ spring:
 
   datasource:
     platform: postgres
-    url: jdbc:postgresql://${DATABASE_URL_NAME}:5432/${DATABASE_NAME}
+    url: jdbc:postgresql://${DATABASE_URL}:5432/${DATABASE_NAME}
     username: ${DATABASE_USER}
     password:  ${DATABASE_PASS}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate.ddl-auto: update
-   # hibernate.ddl-auto: create-drop
     show-sql: true
     open-in-view: false
     generate-ddl: true
@@ -19,7 +18,3 @@ spring:
       hibernate.enable_lazy_load_no_trans: true
       org.hibernate.envers.audit_table_prefix: AUD_
       org.hibernate.envers.audit_table_suffix: null
-  security:
-    user:
-      name: julia
-      password: 123
